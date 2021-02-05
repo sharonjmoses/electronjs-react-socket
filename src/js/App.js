@@ -7,22 +7,22 @@ import Peer from "simple-peer";
 
 export default function app() {
 
-const Video = styled.video`
-  border: 1px solid blue;
-  width: 50%;
-  height: 50%;
-`;
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
+// const Video = styled.video`
+//   border: 1px solid blue;
+//   width: 50%;
+//   height: 50%;
+// `;
+// const Container = styled.div`
+//   height: 100vh;
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+// `;
 
-const Row = styled.div`
-  display: flex;
-  width: 100%;
-`;
+// const Row = styled.div`
+//   display: flex;
+//   width: 100%;
+// `;
     const [stream, setStream] = useState();
     const [yourID, setYourID] = useState("");
     const [users, setUsers] = useState({});
@@ -126,14 +126,14 @@ const Row = styled.div`
     let UserVideo;
     if (logs) {
       UserVideo = (
-        <Video playsInline muted ref={userVideo} autoPlay />
+        <video playsInline muted ref={userVideo} autoPlay />
       );
     }
   
     let PartnerVideo;
     if (callAccepted) {
       PartnerVideo = (
-        <Video playsInline muted ref={partnerVideo} autoPlay />
+        <video playsInline muted ref={partnerVideo} autoPlay />
       );
     }
 
@@ -169,13 +169,13 @@ const Row = styled.div`
         //     {incomingCall}
         // </div>
 
-        <Container>
+        <>
              <h1>My Id is {yourID}</h1>
-        <Row>
+       
           {UserVideo}
           {PartnerVideo}
-        </Row>
-        <Row>
+        
+       
           {Object.keys(users).map(key => {
             if (key === yourID) {
               return null;
@@ -184,11 +184,10 @@ const Row = styled.div`
               <button key={`${key}`} onClick={() => callPeer(key)}>Call {key}</button>
             );
           })}
-        </Row>
-        <Row>
+       
           {incomingCall}
-        </Row>
-      </Container>
+        
+      </>
 
     )
 
