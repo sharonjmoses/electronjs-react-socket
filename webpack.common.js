@@ -4,7 +4,8 @@ module.exports = {
   mode: 'development',
   entry: './src/js/index.js',
   devtool: 'inline-source-map',
-  target: 'electron-renderer',
+  target: 'web',
+ 
   module: {
     rules: [
       {
