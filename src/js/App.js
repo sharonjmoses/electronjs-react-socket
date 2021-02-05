@@ -41,27 +41,28 @@ export default function app() {
         socket.current = io.connect("http://localhost:8000/");
 
 
-        console.log(socket.current)
+        // console.log(socket.current)
 
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
 
             setStream(stream);
-
-            if (userVideo.current) {
-                userVideo.current.srcObject = stream;
-            }
+            userVideo.current.srcObject = stream;
+            // console.log(userVideo.current)
+            // if (userVideo.current) {
+            //     userVideo.current.srcObject = stream;
+            // }
             // userVideo.current.srcObject = stream;
             // partnerVideo.current.srcObject = stream;
 
         })
 
         socket.current.on("yourID", (id) => {
-            console.log(id)
+            // console.log(id)
             setYourID(id);
         })
 
         socket.current.on("allUsers", (users) => {
-            console.log(users)
+            // console.log(users)
             setUsers(users);
         });
 
@@ -122,9 +123,9 @@ export default function app() {
         })
 
     }
-    let logs = true;
+   
     let UserVideo;
-    if (logs) {
+    if (UserVideo) {
       UserVideo = (
         <video playsInline muted ref={userVideo} autoPlay />
       );
@@ -172,7 +173,7 @@ export default function app() {
         <>
              <h1>My Id is {yourID}</h1>
        
-          {UserVideo}
+             <video playsInline muted ref={userVideo} autoPlay />
           {PartnerVideo}
         
        
