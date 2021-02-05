@@ -65,6 +65,11 @@ const Video = styled.video`
     }, []);
 
 
+    function acceptCall(){
+        console.log('Accepted')
+    }
+
+
     function callPeer(id) {
         console.log(id)
         const peer = new Peer({
@@ -137,6 +142,8 @@ const Video = styled.video`
                     <button id={`${key}`} onClick={() => callPeer(key)}>Call {key}</button>
                 );
             })}
+
+            {incomingCall}
         </div>
 
     )
