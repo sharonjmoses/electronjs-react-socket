@@ -12,7 +12,17 @@ const Video = styled.video`
   width: 50%;
   height: 50%;
 `;
+const Container = styled.div`
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 
+const Row = styled.div`
+  display: flex;
+  width: 100%;
+`;
     const [stream, setStream] = useState();
     const [yourID, setYourID] = useState("");
     const [users, setUsers] = useState({});
@@ -65,9 +75,24 @@ const Video = styled.video`
     }, []);
 
 
-    function acceptCall(){
-        console.log('Accepted')
-    }
+   
+  function acceptCall() {
+    setCallAccepted(true);
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream: stream,
+    });
+    peer.on("signal", data => {
+      socket.current.emit("acceptCall", { signal: data, to: caller })
+    })
+
+    peer.on("stream", stream => {
+      partnerVideo.current.srcObject = stream;
+    });
+
+    peer.signal(callerSignal);
+  }
 
 
     function callPeer(id) {
@@ -75,23 +100,6 @@ const Video = styled.video`
         const peer = new Peer({
           initiator: true,
           trickle: false,
-         
-          config: {
-
-            iceServers: [
-                {
-                    urls: "stun:numb.viagenie.ca",
-                    username: "sultan1640@gmail.com",
-                    credential: "98376683"
-                },
-                {
-                    urls: "turn:numb.viagenie.ca",
-                    username: "sultan1640@gmail.com",
-                    credential: "98376683"
-                }
-            ]
-        },
-   
           stream: stream,
         });
 
@@ -114,6 +122,21 @@ const Video = styled.video`
         })
 
     }
+    let logs = true;
+    let UserVideo;
+    if (logs) {
+      UserVideo = (
+        <Video playsInline muted ref={userVideo} autoPlay />
+      );
+    }
+  
+    let PartnerVideo;
+    if (callAccepted) {
+      PartnerVideo = (
+        <Video playsInline ref={partnerVideo} autoPlay />
+      );
+    }
+
     let incomingCall;
     if (receivingCall) {
       incomingCall = (
@@ -125,26 +148,46 @@ const Video = styled.video`
     }
 
     return (
-        <div>
-            <h1>Your Video</h1>
-            <Video playsInline ref={userVideo} autoPlay />
-            <h1>Client Video</h1>
-            <Video playsInline ref={partnerVideo} autoPlay />
-            <button onClick={() => {
-                electron.notificationApi.sendNotification('My custom notification!');
-            }}>Notify</button>
+        // <div>
+        //     <h1>Your Video</h1>
+        //     {UserVideo}
+        //     <h1>Client Video</h1>
+        //     {PartnerVideo}
+        //     <button onClick={() => {
+        //         electron.notificationApi.sendNotification('My custom notification!');
+        //     }}>Notify</button>
 
-            {Object.keys(users).map(key => {
-                if (key === yourID) {
-                    return null;
-                }
-                return (
-                    <button id={`${key}`} onClick={() => callPeer(key)}>Call {key}</button>
-                );
-            })}
+        //     {Object.keys(users).map(key => {
+        //         if (key === yourID) {
+        //             return null;
+        //         }
+        //         return (
+        //             <button id={`${key}`} onClick={() => callPeer(key)}>Call {key}</button>
+        //         );
+        //     })}
 
-            {incomingCall}
-        </div>
+        //     {incomingCall}
+        // </div>
+
+        <Container>
+        <Row>
+          {UserVideo}
+          {PartnerVideo}
+        </Row>
+        <Row>
+          {Object.keys(users).map(key => {
+            if (key === yourID) {
+              return null;
+            }
+            return (
+              <button key={`${key}`} onClick={() => callPeer(key)}>Call {key}</button>
+            );
+          })}
+        </Row>
+        <Row>
+          {incomingCall}
+        </Row>
+      </Container>
 
     )
 
