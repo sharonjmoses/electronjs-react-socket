@@ -174,7 +174,7 @@ export default function app() {
              <h1>My Id is {yourID}</h1>
        
              <video playsInline muted ref={userVideo} autoPlay />
-          {PartnerVideo}
+             {PartnerVideo}
         
        
           {Object.keys(users).map(key => {
