@@ -56,12 +56,12 @@ const Row = styled.div`
         })
 
         socket.current.on("yourID", (id) => {
-            // console.log(id)
+            console.log(id)
             setYourID(id);
         })
 
         socket.current.on("allUsers", (users) => {
-            // console.log(users)
+            console.log(users)
             setUsers(users);
         });
 
@@ -96,7 +96,7 @@ const Row = styled.div`
 
 
     function callPeer(id) {
-        console.log(id)
+        console.log('tocall', id, yourID)
         const peer = new Peer({
           initiator: true,
           trickle: false,
@@ -133,7 +133,7 @@ const Row = styled.div`
     let PartnerVideo;
     if (callAccepted) {
       PartnerVideo = (
-        <Video playsInline ref={partnerVideo} autoPlay />
+        <Video playsInline muted ref={partnerVideo} autoPlay />
       );
     }
 
@@ -170,6 +170,7 @@ const Row = styled.div`
         // </div>
 
         <Container>
+             <h1>My Id is {yourID}</h1>
         <Row>
           {UserVideo}
           {PartnerVideo}
